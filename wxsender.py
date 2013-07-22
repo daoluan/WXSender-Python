@@ -155,7 +155,7 @@ class WXSender:
             
     def run_test(self):
         # 登录，需要提供正确的账号密码
-        self.login('daoluanxiaozi@126.com', 'a123456')
+        self.login('123@abc.io', 'abcdef')
         
         # 获取微信公众账号 fakeid
         self.get_fakeid()
