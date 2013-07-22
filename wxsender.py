@@ -3,6 +3,11 @@ import urllib2,cookielib,re
 import json
 from hashlib import md5
 
+'''
+    author:     daoluan
+    datetime:   2013-07-22
+'''
+
 class WXSender:
     '''
         登录->获取微信公众账号 fakeid->获取好友 fakeid->向所有好友群发送微信或者向指定好友发送微信
