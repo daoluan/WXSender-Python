@@ -153,9 +153,9 @@ class WXSender:
             
         goodboy(self.get_friend_fakeid.__name__)
             
-    def run_test(self):
+    def run_test(self,account,pwd):
         # 登录，需要提供正确的账号密码
-        self.login('my@my.com', 'my')
+        self.login(account, pwd)
         
         # 获取微信公众账号 fakeid
         self.get_fakeid()
@@ -168,5 +168,5 @@ class WXSender:
         
 if __name__ == '__main__':
     wxs = WXSender()
-    wxs.run_test()
+    wxs.run_test("abc@abc.com","abc")
     
