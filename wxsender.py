@@ -133,7 +133,7 @@ class WXSender:
         fromfakeid = self.user_fakeid
         
         for friend in self.friend_info:
-            postdata = (post_data + "266271560").encode('utf-8')
+            postdata = (post_data + friend["fakeId"]).encode('utf-8')
             
             req = urllib2.Request(url,postdata)
             req.add_header('cookie',self.wx_cookie)
@@ -155,7 +155,7 @@ class WXSender:
             
     def run_test(self):
         # 登录，需要提供正确的账号密码
-        self.login('daoluanxiaozi@126.com', 'a123456')
+        self.login('my@my.com', 'my')
         
         # 获取微信公众账号 fakeid
         self.get_fakeid()
