@@ -9,10 +9,10 @@ Usage
 ===============
 测试用例已经合成到 WXSender 类中，只需要如下代码即可测试：
 
-'''
+```
 wxs = WXSender()
 wxs.run_test("abc@abc.com","abc")
-'''
+```
 
 程序会抛出运行过程中的错误。
 
