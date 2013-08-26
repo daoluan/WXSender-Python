@@ -26,4 +26,4 @@ None.
 
 Proposal
 ===============
-有 bug 请联系我：http://weibo.com/daoluanxiaozi
+有 bug 请联系我：http://weibo.com/daoluanxiaozi 	
