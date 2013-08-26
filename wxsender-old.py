@@ -2,14 +2,12 @@
 import urllib2,cookielib,re
 import json
 import hashlib
-from urllib import URLopener
 
 '''
     author:     daoluan
     datetime:   2013-07-22
     
     update:    2013-08-22
-    update:    2013-08-26
 '''
 def goodboy(funcname): print "%s finished." % funcname
 
@@ -98,7 +96,7 @@ class WXSender:
             raise Exception("Cookies,token or user_fakeid is missing.")
         
         # 获取 friend fakeid
-        base_url = ('https://mp.weixin.qq.com/cgi-bin/contactmanage?t=t=user/index&lang=zh_CN&pagesize=50' + 
+        base_url = ('http://mp.weixin.qq.com/cgi-bin/contactmanagepage?t=wxm-friend&lang=zh_CN&pagesize=50' + 
                     '&type=0&groupid=0' + 
                     '&token=' + self.token + 
                     '&pageidx=')    # pageidx = ?
@@ -109,17 +107,16 @@ class WXSender:
             url = base_url + str(page_idx)
             req = urllib2.Request(url)
             req.add_header('cookie',self.wx_cookie)
-            data = urllib2.urlopen(req).read()  
-            p = re.compile(r'"id":([0-9]{4,20})')
-            res = p.findall(data)
+            data = urllib2.urlopen(req).read()
             
-            if not res:
-                break
+            m = re.search(r'<script id="json-friendList" type="json/text">(.*?)</script>',data,re.S)
             
-            for id in res:
-                self.friend_info.append({"id":id})
-                
-        goodboy(self.get_friend_fakeid.__name__)
+            m_json = json.loads(m.group(1))
+            if not m_json:
+                break  
+            
+            self.friend_info += m_json
+#         print self.friend_info
         
     def group_sender(self,msg = "Hello World."):
         if not (self.wx_cookie and self.token and self.user_fakeid and self.friend_info):
@@ -136,7 +133,7 @@ class WXSender:
         fromfakeid = self.user_fakeid
         
         for friend in self.friend_info:
-            postdata = (post_data + friend["id"]).encode('utf-8')
+            postdata = (post_data + friend["fakeId"]).encode('utf-8')
             
             req = urllib2.Request(url,postdata)
             req.add_header('cookie',self.wx_cookie)
@@ -169,24 +166,6 @@ class WXSender:
         # 群发接口：目前只能发送文本信息
         self.group_sender("test")
         
-from urllib2 import BaseHandler, build_opener
-class HTTPHeaderPrint(BaseHandler):
-    def __init__(self):
-        pass
-    
-    def http_request(self, request):
-        print request.headers
-        return request
-
-    def http_response(self, request, response):
-        print response.info()
-        return response
-
-    https_request = http_request
-    https_response = http_response
-    
 if __name__ == '__main__':
     wxs = WXSender()
     wxs.run_test("abc@abc.com","abc")
-    
-    
