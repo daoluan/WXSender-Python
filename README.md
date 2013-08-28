@@ -1,5 +1,7 @@
-WXSender-Python
+WXSender-Python 
 ===============
+
+微信群发接口
 
 WXSender 是用 Python 实现的微信公众平台微信发送接口，可以模拟在网页上登录微信公众平台，给指定或者所有好友发送微信。
 
