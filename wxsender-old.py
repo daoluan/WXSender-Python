@@ -8,6 +8,7 @@ import hashlib
     datetime:   2013-07-22
     
     update:    2013-08-22
+    update:    2013-08-28 这个版本也可以用
 '''
 def goodboy(funcname): print "%s finished." % funcname
 
@@ -109,8 +110,7 @@ class WXSender:
             req.add_header('cookie',self.wx_cookie)
             data = urllib2.urlopen(req).read()
             
-            m = re.search(r'<script id="json-friendList" type="json/text">(.*?)</script>',data,re.S)
-            
+            m = re.search(r'friendsList : \({"contacts":(.*?)}\)\.contacts',data,re.S)
             m_json = json.loads(m.group(1))
             if not m_json:
                 break  
@@ -133,7 +133,7 @@ class WXSender:
         fromfakeid = self.user_fakeid
         
         for friend in self.friend_info:
-            postdata = (post_data + friend["fakeId"]).encode('utf-8')
+            postdata = (post_data + friend["id"]).encode('utf-8')
             
             req = urllib2.Request(url,postdata)
             req.add_header('cookie',self.wx_cookie)
