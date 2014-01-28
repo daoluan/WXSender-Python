@@ -193,4 +193,4 @@ class HTTPHeaderPrint(BaseHandler):
     
 if __name__ == '__main__':
     wxs = WXSender()
-    wxs.run_test("daoluanxiaozi@126.com","a123456")
+    wxs.run_test("账号","密码")
