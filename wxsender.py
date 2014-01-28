@@ -7,9 +7,15 @@ from urllib import URLopener
 '''
     author:     daoluan
     datetime:   2013-07-22
+    env:        python 2.7
     
-    update:    2013-08-22
+    update:    2014-1-28
+    微信变动蛮大的，最要命的是如果你的粉丝  48 小时内没有与公共账号联系，就无法主动发信息给你的粉丝，所以如果要使用此工具，只能要求你的粉丝主动与你互动了。
+    一个应用场景是要求你的粉丝与你的互动，在 48 小时内你可以定时群发信息给你的粉丝。
+    
     update:    2013-08-26
+    update:    2013-08-22
+    
 '''
 def goodboy(funcname): print "%s finished." % funcname
 
@@ -77,20 +83,20 @@ class WXSender:
         if not (self.wx_cookie and self.token):
             raise Exception("Cookies or token is missing.")
         
-        url = 'https://mp.weixin.qq.com/cgi-bin/userinfopage?t=wxm-setting&token=' + self.token + '&lang=zh_CN'
+        url = 'https://mp.weixin.qq.com/cgi-bin/settingpage?t=setting/index&action=index&token=' + self.token + '&lang=zh_CN'
         req = urllib2.Request(url)
         req.add_header('cookie',self.wx_cookie)
         
         data = urllib2.urlopen(req,timeout = 4).read()
         
-        m = re.search(r'fakeid = "(\d+)"',data,re.S | re.I)
+        m = re.search(r'fakeid=(\d+)',data,re.S | re.I)
         
         # group(0) == [fakeid = "123456789"]
         if not m:
             raise Exception("Getting fakeid failed.")
         
         self.user_fakeid = m.group(1)
-        
+        print self.user_fakeid
         goodboy(self.get_fakeid.__name__)
         
     def get_friend_fakeid(self):
@@ -98,7 +104,7 @@ class WXSender:
             raise Exception("Cookies,token or user_fakeid is missing.")
         
         # 获取 friend fakeid
-        base_url = ('https://mp.weixin.qq.com/cgi-bin/contactmanage?t=t=user/index&lang=zh_CN&pagesize=50' + 
+        base_url = ('https://mp.weixin.qq.com/cgi-bin/contactmanage?t=user/index&lang=zh_CN&pagesize=50' + 
                     '&type=0&groupid=0' + 
                     '&token=' + self.token + 
                     '&pageidx=')    # pageidx = ?
@@ -118,7 +124,7 @@ class WXSender:
             
             for id in res:
                 self.friend_info.append({"id":id})
-                
+
         goodboy(self.get_friend_fakeid.__name__)
         
     def group_sender(self,msg = "Hello World."):
@@ -149,7 +155,7 @@ class WXSender:
             # {"ret":"0", "msg":"ok"}
             res = urllib2.urlopen(req).read()
             res_json = json.loads(res)
-            
+
             if res_json["ret"] != "0":
                 # do something.
                 pass
@@ -187,6 +193,4 @@ class HTTPHeaderPrint(BaseHandler):
     
 if __name__ == '__main__':
     wxs = WXSender()
-    wxs.run_test("abc@abc.com","abc")
-    
-    
+    wxs.run_test("daoluanxiaozi@126.com","a123456")
